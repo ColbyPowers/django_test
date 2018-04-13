@@ -26,3 +26,20 @@ class EmployeeAndManagerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Employee
         fields = ('id', 'manager', 'name', 'job_title')
+
+class ManagerRetrieveSerializer(serializers.ModelSerializer):
+    company = CompanySerializer()
+
+    class Meta:
+        model = Manager
+        fields = ('id', 'company', 'name', 'job_title')
+
+class EmployeeRetrieveSerializer(serializers.ModelSerializer):
+    manager = ManagerSerializer()
+
+    class Meta:
+        model = Employee
+        fields = ('id', 'manager', 'name', 'job_title')
+
+
+
