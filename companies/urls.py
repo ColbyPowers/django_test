@@ -17,4 +17,12 @@ urlpatterns = [
         views.ManagerRetrieveView.as_view(), name='manager_retrieval'),
     url(r'^retrieve/employee/(?P<employee_id>[0-9a-z-]+)/$',
         views.EmployeeRetrieveView.as_view(), name='employee_retrieval'),
+    url(r'^destroy/company/(?P<company_id>[0-9a-z-]+)/$',
+        views.CompanyDestroyView.as_view(), name='company_destroy'),
+    url(r'^destroy/manager/(?P<manager_id>[0-9a-z-]+)/$',
+        views.ManagerDestroyView.as_view(), name='manager_destroy'),
+    url(r'^destroy/employee/(?P<employee_id>[0-9a-z-]+)/$',
+        views.EmployeeDestroyView.as_view(), name='employee_destroy'),
+    url(r'^update/company/(?P<company_id>[0-9a-z-]+)/$',
+        views.CompanyUpdateView.as_view(), name='company_update'),
 ]
