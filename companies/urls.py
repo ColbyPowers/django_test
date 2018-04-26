@@ -25,4 +25,8 @@ urlpatterns = [
         views.EmployeeDestroyView.as_view(), name='employee_destroy'),
     url(r'^update/company/(?P<company_id>[0-9a-z-]+)/$',
         views.CompanyUpdateView.as_view(), name='company_update'),
+    url(r'^update/manager/(?P<manager_id>[0-9a-z-]+)/$',
+        views.ManagerUpdateView.as_view(), name='manager_update'),
+    url(r'^update/employee/(?P<employee_id>[0-9a-z-]+)/$',
+        views.EmployeeUpdateView.as_view(), name='employee_update'),
 ]

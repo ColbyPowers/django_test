@@ -2,6 +2,7 @@ from rest_framework import generics
 from companies.models import Company, Manager, Employee
 from companies.serializers import CompanySerializer, ManagerSerializer, EmployeeSerializer, EmployeeAndManagerSerializer,\
     ManagerRetrieveSerializer, EmployeeRetrieveSerializer
+from rest_framework.response import Response
 
 import ipdb
 
@@ -87,14 +88,72 @@ class EmployeeDestroyView(generics.DestroyAPIView):
     serializer_class = EmployeeSerializer
 
 
-# Update View of specific Company (Not Working)
-class CompanyUpdateView(generics.UpdateAPIView):
+# Update View of specific Company
+class CompanyUpdateView(generics.RetrieveUpdateAPIView):
     queryset = Company.objects.all()
     lookup_url_kwarg = 'company_id'
     lookup_field = 'id'
     serializer_class = CompanySerializer
 
-    def put(self, request, *args, **kwargs):
-        return self.partial_update(request, *args, **kwargs)
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', True)
+        instance = self.get_object()
+        temp = request.data.copy()
+        temp['location'] = 'Fake Location'
+        serializer = self.get_serializer(instance, data=temp, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+
+        if getattr(instance, '_prefetched_objects_cache', None):
+            # If 'prefetch_related' has been applied to a queryset, we need to
+            # forcibly invalidate the prefetch cache on the instance.
+            instance._prefetched_objects_cache = {}
+
+        return Response(serializer.data)
+
+class ManagerUpdateView(generics.RetrieveUpdateAPIView):
+    queryset = Manager.objects.all()
+    lookup_url_kwarg = 'manager_id'
+    lookup_field = 'id'
+    serializer_class = ManagerSerializer
+
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', True)
+        instance = self.get_object()
+        temp = request.data.copy()
+        temp['job_title'] = 'Fake Job Title'
+        serializer = self.get_serializer(instance, data=temp, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+
+        if getattr(instance, '_prefetched_objects_cache', None):
+            # If 'prefetch_related' has been applied to a queryset, we need to
+            # forcibly invalidate the prefetch cache on the instance.
+            instance._prefetched_objects_cache = {}
+
+        return Response(serializer.data)
 
 
+class EmployeeUpdateView(generics.RetrieveUpdateAPIView):
+    queryset = Employee.objects.all()
+    lookup_url_kwarg = 'employee_id'
+    lookup_field = 'id'
+    serializer_class = EmployeeSerializer
+
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', True)
+        instance = self.get_object()
+        temp = request.data.copy()
+        temp['job_title'] = 'Fake Job Title'
+        serializer = self.get_serializer(instance, data=temp, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+
+        if getattr(instance, '_prefetched_objects_cache', None):
+            # If 'prefetch_related' has been applied to a queryset, we need to
+            # forcibly invalidate the prefetch cache on the instance.
+            instance._prefetched_objects_cache = {}
+
+        return Response(serializer.data)
+
+        
